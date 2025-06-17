@@ -20,6 +20,20 @@ input.addEventListener("keydown", event => {
 });
 setGridSize.appendChild(input);
 
+let randomColor = false;
+const toggleRandomColor = document.createElement("button");
+toggleRandomColor.textContent = "Random color is OFF";
+toggleRandomColor.addEventListener("click", () => {
+    if (randomColor) {
+	randomColor = false;
+	toggleRandomColor.textContent = "Random color is OFF";
+    } else {
+	randomColor = true;
+	toggleRandomColor.textContent = "Random color is ON";
+    }
+});
+setGridSize.appendChild(toggleRandomColor);
+
 function createGrid(size) {
     const containerExists = document.querySelector(".container");
     if (containerExists !== null) {
@@ -69,10 +83,28 @@ function handler(event) {
     event.preventDefault();
     const target = event.target;
     const buttons = event.buttons;
-    if (target.className === "square" && buttons === 1) {
+    if (target.className === "square" &&
+	buttons === 1 &&
+    !randomColor) {
 	target.style.backgroundColor = "white";
+    }
+    if (target.className === "square" &&
+    buttons === 1 &&
+    randomColor) {
+	const color = randomizeColor();
+	target.style.backgroundColor = `rgb(${color.join(",")})`;
     }
     if (target.className === "square" && buttons === 2) {
 	target.style.backgroundColor = "#888888";
     }
+}
+
+
+function randomizeColor() {
+    const rgb = [];
+    for (let i = 0; i < 3; i++) {
+	const num = Math.floor(Math.random() * 255 + 1);
+	rgb.push(num);
+    }
+    return rgb;
 }
